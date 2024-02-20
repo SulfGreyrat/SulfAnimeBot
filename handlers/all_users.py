@@ -9,12 +9,16 @@ router = Router()
 async def all_users(message: Message):
     users = db.get_users()
     
+    response_message = ''  
+    
     if users:
-        message = "Активные пользователи:\n"
+        response_message = "Активные пользователи:\n"
         for user in users:
-            message += f"- Имя: {user[0]}, ID: {user[1]}"
+            response_message += f"- Имя: {user[2]}, ID: {user[1]}\n"
     else:
-        message = "Нет активных пользователей."
-        
-    await message.answer(message)
+        response_message = "Нет активных пользователей."
+    
+    print(response_message)
+    await message.answer(f"{response_message}")
+
    

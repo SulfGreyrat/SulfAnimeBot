@@ -13,3 +13,37 @@ main = InlineKeyboardMarkup(
         ]
     ]
 )
+
+def inlinebutton(id):
+    kb = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text='💖', callback_data=f'favorite_{id}'),
+            InlineKeyboardButton(text='✅', callback_data=f'viewed_{id}')
+            ]
+        ]
+    )
+    
+    return kb
+
+def delete_favorite_inlinebutton(id):
+    kb = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text='❌', callback_data=f'delete-favorite_{id}')
+            ]
+        ]
+    )
+    
+    return kb
+
+def delete_viewed_inlinebutton(id):
+    kb = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text='❌', callback_data=f'delete-viewed_{id}')
+            ]
+        ]
+    )
+    
+    return kb

@@ -19,8 +19,6 @@ async def main(url='https://jut.su/anime/'):
             await get_anime(driver)
     except Exception as e:
         print(e)
-    finally:
-        driver.quit()
         
 async def get_main_page(driver, url):
     page_number = 1

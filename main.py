@@ -16,7 +16,6 @@ from handlers import all_users, favorites, other_messsage, random_anime, viewed_
 logging.basicConfig(level=logging.INFO)
 
                                                                                             
-
 async def main():
     dp.include_routers(all_users.router, favorites.router, other_messsage.router, random_anime.router, viewed_animes.router, callback.router)
     await dp.start_polling(bot) 
