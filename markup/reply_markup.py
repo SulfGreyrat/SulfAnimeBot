@@ -13,7 +13,8 @@ main_admin = ReplyKeyboardMarkup(
             KeyboardButton(text="💝 Избранное")
         ],
         [
-            KeyboardButton(text="🔄 Обновить")
+            KeyboardButton(text="🔄 Обновить"),
+            KeyboardButton(text='⚙️ Настройки')      
         ]
     ],
     resize_keyboard=True
@@ -27,6 +28,9 @@ main = ReplyKeyboardMarkup(
         [
             KeyboardButton(text="💊 Просмотренные"),
             KeyboardButton(text="💝 Избранное")
+        ],
+        [
+            KeyboardButton(text='⚙️ Настройки')
         ]
     ],
     resize_keyboard=True

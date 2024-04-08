@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройка фильтрации</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="header__container">
+                <div class="logo">
+                    <h1 class="logo_h1">SulfGreyrat</h1>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="container">
+                <div class="year_change">
+                    <div class="range-container">
+                        <label for="startYear">Начальный год:</label>
+                        <input type="range" id="startYear" name="startYear" min="1974" max="2077" class="range-input" oninput="updateRange()">
+                    </div>
+                
+                    <div class="range-container">
+                        <label for="endYear">Конечный год:</label>
+                        <input type="range" id="endYear" name="endYear" min="1974" max="2024" class="range-input" oninput="updateRange()">
+                    </div>
+                
+                    <p id="selected-range">Выбранный промежуток: <span id="range-display">1974 - 1974</span></p>
+                
+                </div>
+                <div class="genres">
+                    <input type="checkbox" id="action" name="action"/>
+                    <label for="action">Экшен</label>
+                    <br/>
+                    <input type="checkbox" id="adventure" name="adventure"/>
+                    <label for="adventure">Приключения</label>
+                    <br/>
+                    <input type="checkbox" id="comedy" name="comedy"/>
+                    <label for="comedy">Комедия</label>
+                    <br/>
+                    <input type="checkbox" id="magic" name="magic"/>
+                    <label for="magic">Магия</label>
+                    <br/>
+                    <input type="checkbox" id="fentazy" name="fentazy"/>
+                    <label for="fentazy">Фэнтези</label>
+                    <br/>
+                    <input type="checkbox" id="drama" name="drama"/>
+                    <label for="drama">Драма</label>
+                    <br/>
+                    <input type="checkbox" id="detective" name="detective"/>
+                    <label for="detective">Детектив</label>
+                    <br/>
+                    <input type="checkbox" id="triller" name="triller"/>
+                    <label for="triller">Триллер</label>
+                    <br/>
+                    <input type="checkbox" id="fantasy" name="fantasy"/>
+                    <label for="fantasy">Фантастика</label>
+                    <br/>
+                    <input type="checkbox" id="mexa" name="mexa"/>
+                    <label for="mexa">Меха</label>
+                    <br/>
+                    <input type="checkbox" id="roman" name="roman"/>
+                    <label for="roman">Романтика</label>
+                    <br/>
+                    <input type="checkbox" id="love" name="love"/>
+                    <label for="love">Этти</label>
+                    <br/>
+                    <input type="checkbox" id="school" name="school"/>
+                    <label for="school">Школа</label>
+                    <br/>
+                    <input type="checkbox" id="war" name="war"/>
+                    <label for="war">Боевик</label>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+    <script>
+        function updateRange() {
+            var startYearInput = document.getElementById('startYear');
+            var endYearInput = document.getElementById('endYear');
+            var rangeDisplay = document.getElementById('range-display');
+
+            var startYear = startYearInput.value;
+            var endYear = endYearInput.value;
+
+            rangeDisplay.innerText = startYear + ' - ' + endYear;
+        }
+
+        let tg = Window.Telegram.WebApp;
+
+        tg.expand();
+            
+        tg.MainButton.textColor = "#FFF"
+        tg.MainButton.color = "#2acb37"
+            
+        let years = '';
+        let genres = '';
+            
+        //let action = document.getElementById("action")
+        let adventure = document.getElementById("adventure")
+        let comedy = document.getElementById("comedy")
+        let magic = document.getElementById("magic")
+        let fentazy = document.getElementById("fentazy")
+        let drama = document.getElementById("drama")
+        let detective = document.getElementById("detective")
+        let triller = document.getElementById("triller")
+        let fantasy = document.getElementById("fantasy")
+        let mexa = document.getElementById("mexa")
+        let roman = document.getElementById("roman")
+        let love = document.getElementById("love")
+        let school = document.getElementById("school")
+        let war = document.getElementById("war")
+            
+        // Получаем ссылку на элемент чекбокса
+        const checkbox = document.getElementById('action');
+            
+        // Добавляем обработчик события change
+        checkbox.addEventListener('change', function() {
+          // В этой функции будет выполнен код при изменении состояния чекбокса
+          if (this.checked) {
+            console.log('Чекбокс отмечен');
+          } else {
+            console.log('Чекбокс снят');
+          }
+        });
+        
+        
+        war.addEventListener('change', function() {
+            console.log("djfsdf")
+          });
+      
+
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
+
+<!--<script scr='https://telegram.org/js/telegram-web-app.js'></script>-->

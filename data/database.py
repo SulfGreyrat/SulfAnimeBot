@@ -28,12 +28,17 @@ class BotDB:
             CREATE TABLE IF NOT EXISTS anime (
                 id INTEGER PRIMARY KEY,
                 name TEXT,
-                link TEXT,
+                orig_name TEXT,
+                jutsu_link TEXT,
                 series TEXT,
-                options TEXT,
                 description TEXT,
-                img_url TEXT
-            )
+                img_url TEXT, 
+                year INTEGER,
+                genre TEXT,
+                ratting TEXT,
+                animego_link TEXT,
+                support TEXT
+                )
         ''')
         
         self.cursor.execute('''
@@ -47,6 +52,20 @@ class BotDB:
             CREATE TABLE IF NOT EXISTS favorite (
                 a_id TEXT,
                 user_id TEXT
+            )
+        ''')
+        
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS filtr (
+                genres TEXT,
+                user_id INTEGER
+            )
+        ''')
+        
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS todays_anime (
+                text TEXT,
+                date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
         
@@ -69,18 +88,21 @@ class BotDB:
     def add_anime(self, name, link, series):
         anime_ex = self.cursor.execute("SELECT * FROM anime WHERE name = ?", (name,)).fetchone()
         if not anime_ex:
-            self.cursor.execute("INSERT INTO anime (name, link, series) VALUES (?, ?, ?)", (name, link, series))
+            self.cursor.execute("INSERT INTO anime (name, jutsu_link, series) VALUES (?, ?, ?)", (name, link, series))
+            self.db.commit()
+        else:
+            self.cursor.execute("UPDATE anime SET jutsu_link = ?, series = ? WHERE name = ?", (link, series, name))
             self.db.commit()
             
-    def update_anime(self, name, option, describtion, img_url):
+    def update_anime(self, name,orig_name, year, genre, describtion, img_url):
         anime_ex = self.cursor.execute("SELECT * FROM anime WHERE name = ?", (name,))
 
-        self.cursor.execute("UPDATE anime SET name = ?, options = ?, description = ?, img_url = ? WHERE name = ?", (name, option, describtion, img_url, name))
+        self.cursor.execute("UPDATE anime SET name = ?, orig_name = ?, genre = ?, year = ?, description = ?, img_url = ? WHERE name = ?", (name, orig_name, genre, year, describtion, img_url, name))
         self.db.commit()
             
     def all_anime(self):
-        anime = self.cursor.execute("SELECT * FROM anime").fetchall()
-        return anime
+        animes = self.cursor.execute("SELECT * FROM anime").fetchall()
+        return animes
     
     def add_to_viewed(self, a_id, user_id):
         anime_ex = self.cursor.execute("SELECT * FROM viewed WHERE a_id = ? AND user_id = ?", (a_id, user_id)).fetchone()
@@ -119,8 +141,7 @@ class BotDB:
         self.db.commit()
             
     def get_links(self):
-        links = self.cursor.execute("SELECT * FROM anime WHERE options IS NULL").fetchall()
-        print(links)
+        links = self.cursor.execute("SELECT jutsu_link FROM anime WHERE genre IS NULL").fetchall()
         return links
     
     def delete_null(self):
@@ -144,4 +165,50 @@ class BotDB:
             self.cursor.execute("UPDATE admins SET name = ? WHERE user_id = ?", (name, user_id))
             self.db.commit()
             return 'user_ex'
+    
+    def add_animego(self, name, desc, ratting, year, orig_name, genre, link, img_link):
+        anime = self.cursor.execute("SELECT * FROM anime WHERE name = ? AND year = ?", (name, year)).fetchone()
+        print(anime)
+        if not anime:
+            self.cursor.execute("INSERT INTO anime (name, orig_name, description, img_url, year, genre, ratting, animego_link) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (name, orig_name, desc, img_link, year, genre, ratting, link))
+            self.db.commit()
+        else:
+            self.cursor.execute("UPDATE anime SET name = ?, orig_name = ?, year = ?, ratting = ?, genre = ?, animego_link = ?, img_url = ?  WHERE name = ?", (name, orig_name, year, ratting, genre, link, img_link, name))
+            
+    def set_support(self):
+        animes = self.cursor.execute("SELECT * FROM anime WHERE support IS NULL").fetchall()
+        print(animes)
+        for anime in animes:
+            self.cursor.execute("UPDATE anime SET support = ? WHERE name = ?", ('multi', anime[1]))
+            self.db.commit()
+            
+            print(anime)
+            
+    def get_genres(self, user_id):
+        genres = self.cursor.execute("SELECT genres FROM filtr WHERE user_id = ?", (user_id, )).fetchall()
+        return genres
+    
+    def set_genres(self, a_genre, user_id):
+        f_genres = self.cursor.execute("SELECT genres FROM filtr WHERE user_id = ?", (user_id,)).fetchone()
+        genre_ex = self.cursor.execute("SELECT * FROM filtr WHERE genres = ? AND user_id = ?", (a_genre, user_id)).fetchone()
+
+        if f_genres:
+            if genre_ex:
+                self.cursor.execute("DELETE FROM filtr WHERE genres = ?", (a_genre, ))
+            else:
+                self.cursor.execute("INSERT INTO filtr (genres, user_id) VALUES (?, ?)", (a_genre, user_id))           
+                #self.cursor.execute("UPDATE filtr SET genres = ? WHERE user_id = ?", (a_genre, user_id))
+        else:
+            self.cursor.execute("INSERT INTO filtr (genres, user_id) VALUES (?, ?)", (a_genre, user_id))
+        
+        self.db.commit()
+         
+        genres = self.cursor.execute("SELECT genres FROM filtr WHERE user_id = ?", (user_id, )).fetchall()
+        return genres   
+        
+    def todays_anime(self):
+        todays_anime = self.cursor.execute("SELECT text FROM todays_anime").fetchall()
+        return todays_anime
+    
+    
     

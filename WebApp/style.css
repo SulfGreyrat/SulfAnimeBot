@@ -1,0 +1,36 @@
+header{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align:  center;
+    font-size: 10px;
+}
+
+.header__container{
+    padding: 5px;
+    background-image: linear-gradient(red, yellow);
+    border-radius: 50px;
+}
+
+main{
+    flex-wrap: wrap;
+    color: aliceblue;
+    display: flex;
+    margin-top: 40px;
+    margin-left: 20px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+html{
+    background-image: url('https://i.pinimg.com/originals/03/03/9a/03039a857ed3424c839bcd974c27c0a9.jpg');
+    background-size: cover;
+}
+.genres{
+    width: 50%;
+    display: inline-block;
+    margin-right: 120px;
+    margin-bottom: 20px;
+}
+
+.year_change{
+    width: 50%;
+    display: inline-block;
+}
