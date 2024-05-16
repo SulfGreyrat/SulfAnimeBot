@@ -8,7 +8,11 @@ from markup import inline_markup as ikb
 import logging
 import asyncio
 import random
+import os
 from handlers import anime_send
+import requests
+
+
 
 router = Router()
 
@@ -32,6 +36,21 @@ def search(search_arr):
         return unique_result
     else:
         return []
+
+
+
+def what_anime_is_that(path):
+    json_data = requests.post("https://api.trace.moe/search",
+    files={"image": open(path, "rb")}
+    ).json()
+
+    first_item = json_data['result'][0]
+
+    title = f"Название: {first_item['filename']}"
+    similarity = f"Процент схожести: {first_item['similarity']*100}"
+    link = f"Ссылка на видео: {first_item['video']}"
+
+    return title, similarity, link
 
 
 @router.message(Command('newslatter'))
@@ -61,8 +80,8 @@ async def start_cmd(message: Message):
     if is_admin:
         await message.answer(f"Добро пожаловать! {user_full_name}", reply_markup=kb.main_admin)
     else:
-        photo = 'https://i.pinimg.com/originals/e2/c7/61/e2c7615dbc25056e057f49fb37d19752.jpg'
-        caption = 'Добро пожаловать в @SulfAnimeBot\n\n🌟 Используйте команду /help  для того что бы ознакомиться с имеющимися командой а также 📊Системой рангов\n\n💫 Рандом - Для того что бы бот отправил вам аниме карточку с аниме которым вы не смотрели. Жанры который будут присутствовать в аниме можно настроить с помощью команды /filtration\n\n💊 Просмотренные - Команда создает диаграмму на основе просмотренных аниме которые вы отметили. Также вы можете получить 1/5 - первые 5 просмотренных аниме 2/5 - последние 5 аниме txt - для того что бы получить список всех просмотренных аниме в одном текстовом файле\n\n💝 Избранное - Это команда используется для того что бы получить все аниме храняшимися у вас в Избранном\n\n⚙️ Настройки - Позволяет вам настроить жанры аниме а также отправляет список аниме которые выйдут сегодня.\n\n🌟 Если у вас возникли пожелания или запросы, просто отправьте сообщение волшебному боту по ссылке: @SulfGreyratDeveloperBot.\n\nРазработчик: @SulfGreyratDeveloper'
+        photo = 'https://i.ibb.co/b2Q4mny/f5eb1baea469c951024869e1e70ec5e8.jpg'
+        caption = 'Добро пожаловать в @SulfAnimeBot\n\n🌟 Используйте команду /help  для того что бы ознакомиться с имеющимися командой а также 📊Системой рангов\n\n💫 Рандом - Для того что бы бот отправил вам аниме карточку с аниме которым вы не смотрели. Жанры который будут присутствовать в аниме можно настроить с помощью команды /filtration\n\n💊 Просмотренные - Команда создает диаграмму на основе просмотренных аниме которые вы отметили. Также вы можете получить 1/5 - первые 5 просмотренных аниме 2/5 - последние 5 аниме txt - для того что бы получить список всех просмотренных аниме в одном текстовом файле\n\n💝 Избранное - Это команда используется для того что бы получить все аниме храняшимися у вас в Избранном\n\n⚙️ Настройки - Позволяет вам настроить жанры аниме а также отправляет список аниме которые выйдут сегодня.\n\n🌟 Если у вас возникли пожелания или запросы, просто отправьте сообщение волшебному боту по ссылке: @SulfGreyratDeveloperBot.\n\nРазработчик: @SylpheGreyrat'
         
         await message.answer(f"Добро пожаловать! {user_full_name}", reply_markup=kb.main)
         await bot.send_photo(user_id, photo=photo, caption=caption, reply_markup=ikb.dop_info)
@@ -105,7 +124,7 @@ async def update(message: Message):
 @router.message(Command('help'))
 async def help(message: Message):
     photo = 'https://www.forbesindia.com/media/images/2023/May/img_207055_animebg.jpg'
-    caption = 'Добро пожаловать в @SulfGreyrat_Bot\n\nЕсли у вас возникли пожелания или запросы, просто отправьте сообщение боту по ссылке: @SulfGreyratDeveloperBot.'
+    caption = 'Добро пожаловать в @SulfAnimeBot\n\nЕсли у вас возникли пожелания или запросы, просто отправьте сообщение боту по ссылке: @SulfGreyratDeveloperBot.'
     
     await message.answer_photo(photo=photo, caption=caption, reply_markup=ikb.dop_info)
 
@@ -150,12 +169,26 @@ async def commands(call: types.CallbackQuery):
 @router.callback_query(F.data == 'about')
 async def about(call: types.CallbackQuery):
     photo = 'https://abrakadabra.fun/uploads/posts/2022-02/1645999613_2-abrakadabra-fun-p-oboi-na-pk-estetichnie-anime-2.jpg'
-    caption = 'дай денег'
+    caption = "✨О проекте✨\n\nSulfAnimeBot - это чат-бот, разработанный для любителей аниме и манги. Он предоставляет пользователю удобный интерфейс для получения информации о различных аниме сериалах, персонажах, озвучке, студиях-производителях и многом другом.\n\nГлавная цель SulfAnimeBot - помочь аниме-фанатам находить интересные для них произведения, получать информацию о них и делиться впечатлениями с другими пользователями. Благодаря богатой базе данных и интуитивно понятному интерфейсу, бот облегчает поиск и выбор аниме для просмотра."
         
-    await bot.send_photo(chat_id=call.from_user.id, photo=photo, caption=caption)
+    await bot.send_photo(chat_id=call.from_user.id, photo=photo, caption=caption, parse_mode='HTML', reply_markup=ikb.donate)
     
+@router.message(F.photo)
+async def messages(message: Message):
+    user_id = message.from_user.id
+    msg = message.text
+
+    file_id = message.photo[-1].file_id # Get file id
+    file = await bot.get_file(file_id) # Get file path
+    path = f"handlers/trace_moe/{user_id}.jpg"
+    await bot.download_file(file.file_path, f"handlers/trace_moe/{user_id}.jpg")
     
-    
+    await asyncio.sleep(5)
+
+    anime = what_anime_is_that(path)
+    await message.answer(f"{anime}")
+    print(anime)
+
 @router.message()
 async def messages(message: Message):
     user_id = message.from_user.id
@@ -168,7 +201,7 @@ async def messages(message: Message):
                 while True:
                     try:
                         anime = random.choice(animes_result)
-                        await anime_send.send_anime(anime, user_id, 'usually')
+                        await anime_send.send_anime(anime, user_id, 'all')
                         break
                     except Exception as e:
                         print(e)
@@ -179,3 +212,4 @@ async def messages(message: Message):
             
     except Exception as e:
         await message.answer('Произошла ошибка повторите запрос.') 
+

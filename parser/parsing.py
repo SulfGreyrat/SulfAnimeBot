@@ -8,24 +8,7 @@ import logging
 import asyncio
 import re
 
-from googletrans import Translator
-from AnilistPython import Anilist
-
-anilist = Anilist()
-
 from main import db
-
-
-def translate_text(text, target_language='en'):
-    try:
-        translator = Translator()
-        translation = translator.translate(text, dest=target_language)
-        return translation.text
-    except:
-        print(f"Eror ocured when we tarnslate:\n{text}")
-
-#####  Jutsu parser  ##################
-
 
 async def main(url='https://jut.su/anime/'):
     try:

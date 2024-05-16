@@ -80,6 +80,18 @@ settings = InlineKeyboardMarkup(
     ]
 )
 
+donate = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text='Privacy Policy', url='https://sulfgreyrat.godaddysites.com/privacy-policy'),
+            InlineKeyboardButton(text='О проекте', url='https://sulfgreyrat.godaddysites.com/')
+        ],
+        [
+            InlineKeyboardButton(text='Donate', url='https://www.donationalerts.com/r/sulfgreyrat')
+        ]
+    ]
+)
+
 def inlinebutton(id):
     kb = InlineKeyboardMarkup(
         inline_keyboard=[
@@ -113,3 +125,4 @@ def delete_viewed_inlinebutton(id):
     )
     
     return kb
+
