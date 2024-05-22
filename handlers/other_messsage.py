@@ -12,8 +12,6 @@ import os
 from handlers import anime_send
 import requests
 
-
-
 router = Router()
 
 def search(search_arr):
@@ -45,12 +43,10 @@ def what_anime_is_that(path):
     ).json()
 
     first_item = json_data['result'][0]
+    
+    data = f"Название: {first_item['filename']}\nПроцент схожести: {first_item['similarity']*100}\nСсылка на видео: {first_item['video']}"
 
-    title = f"Название: {first_item['filename']}"
-    similarity = f"Процент схожести: {first_item['similarity']*100}"
-    link = f"Ссылка на видео: {first_item['video']}"
-
-    return title, similarity, link
+    return data
 
 
 @router.message(Command('newslatter'))
@@ -123,7 +119,7 @@ async def update(message: Message):
     
 @router.message(Command('help'))
 async def help(message: Message):
-    photo = 'https://www.forbesindia.com/media/images/2023/May/img_207055_animebg.jpg'
+    photo = 'https://i.ibb.co/4WDXmbQ/b637cc75517c1bb598783495b363b196.jpg'
     caption = 'Добро пожаловать в @SulfAnimeBot\n\nЕсли у вас возникли пожелания или запросы, просто отправьте сообщение боту по ссылке: @SulfGreyratDeveloperBot.'
     
     await message.answer_photo(photo=photo, caption=caption, reply_markup=ikb.dop_info)
@@ -172,7 +168,8 @@ async def about(call: types.CallbackQuery):
     caption = "✨О проекте✨\n\nSulfAnimeBot - это чат-бот, разработанный для любителей аниме и манги. Он предоставляет пользователю удобный интерфейс для получения информации о различных аниме сериалах, персонажах, озвучке, студиях-производителях и многом другом.\n\nГлавная цель SulfAnimeBot - помочь аниме-фанатам находить интересные для них произведения, получать информацию о них и делиться впечатлениями с другими пользователями. Благодаря богатой базе данных и интуитивно понятному интерфейсу, бот облегчает поиск и выбор аниме для просмотра."
         
     await bot.send_photo(chat_id=call.from_user.id, photo=photo, caption=caption, parse_mode='HTML', reply_markup=ikb.donate)
-    
+    await call.answer()
+
 @router.message(F.photo)
 async def messages(message: Message):
     user_id = message.from_user.id
